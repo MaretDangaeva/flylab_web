@@ -226,7 +226,7 @@ body{background:radial-gradient(ellipse 55% 37% at 94% -5%,#f4e6ff,transparent 7
   <div class="scene-museum"><span class="museum-edition">КОЛЛЕКЦИЯ · 01 / 06</span><span class="museum-plaque">ЭКСПОНАТ № 01 <b>ИССЛЕДУЙ</b></span><span class="museum-ornament">✧</span></div>
 </div><div class="mini-hero-copy"><div class="mini-kicker" id="miniKicker">Интерактивное путешествие</div><h3 id="miniHeroTitle">ШКОЛА ПИЛОТА</h3><p id="miniHeroSubtitle">Узнай, как управляют пассажирским самолётом — от взлёта до посадки.</p><span class="mini-cta">НАЧАТЬ ИССЛЕДОВАНИЕ <span aria-hidden="true">↗</span></span></div><span class="mini-orb" aria-hidden="true">✦</span></div><div class="mini-content"><div class="mini-section-kicker" id="miniSectionKicker">01 / Открой новое</div><h4 class="mini-section-title" id="miniSectionTitle">Что ты узнаешь</h4><div class="mini-cards"><div class="mini-card"><div class="mini-card-number">01</div><div class="mini-card-title" id="learn1">Как устроен самолёт</div></div><div class="mini-card"><div class="mini-card-number">02</div><div class="mini-card-title" id="learn2">Что в кабине пилота</div></div><div class="mini-card"><div class="mini-card-number">03</div><div class="mini-card-title" id="learn3">Взлёт и посадка</div></div></div></div><div class="mini-lower"><div class="mini-gallery"><img id="miniGalleryImage" alt="Иллюстрация выбранной темы" loading="lazy"><span>Фотоистории · <span id="miniPhotoCount">6 фото</span></span></div><div class="mini-interactive" id="miniInteractive"><small>ПОПРОБУЙ САМ</small><strong id="miniActivityTitle">Интерактивная схема</strong><button type="button" id="miniTryBtn">Открыть подсказку ↗</button><div class="mini-answer" id="miniAnswer">Нажми на элемент, чтобы узнать, как он работает.</div></div></div></div></div></div>
       </section>
-      <section class="panel output-panel" aria-label="Итоговый промпт"><div class="output-head"><strong>Твой готовый промпт</strong><span id="promptCount" class="output-count">0 знаков</span></div><div class="prompt-wrap"><textarea class="prompt-text" id="promptOutput" aria-label="Готовый промпт" readonly spellcheck="false"></textarea></div><div class="output-footer"><div class="output-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>HTML для редактора</div><button class="copy-btn" type="button" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span id="copyText">Копировать промпт</span></button></div></section>
+      <section class="panel output-panel" aria-label="Итоговый промпт"><div class="output-head"><strong>Твой готовый промпт</strong><span id="promptCount" class="output-count">0 знаков</span></div><div class="prompt-wrap"><textarea class="prompt-text" id="promptOutput" aria-label="Готовый промпт" readonly spellcheck="false"></textarea></div><div class="output-footer"><div class="output-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>HTML · до 1000 строк</div><button class="copy-btn" type="button" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span id="copyText">Копировать промпт</span></button></div></section>
     </div>
   </main>
   <div class="footline">EDULAB · Учиться интересно.</div>
@@ -277,55 +277,66 @@ function safeLine(s,fallback){const out=String(s||'').replace(/[\r\n]+/g,' ').tr
 function goalList(){return $('goals').value.split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean)}
 function chosenSections(){return [...document.querySelectorAll('#sectionChoices input:checked')].map(e=>e.value)}
 function forms(){return {name:safeLine($('siteName').value,'Обучающий проект'),topic:safeLine($('topic').value,'интересная тема'),goals:safeLine($('goals').value,'понять тему шаг за шагом'),hero:safeLine($('heroImage').value,'реалистичная фотография по теме'),author:safeLine($('author').value,'не указан'),audience:$('audience').value,photos:Number($('photoCount').value),facts:Number($('factCount').value),quiz:Number($('quizCount').value),extra:$('extra').value.trim()}}
-function compose(){const f=forms(),sectors=chosenSections(),theme=palettes[state.palette];
-let lines=[
-'Ты — senior web-дизайнер, frontend-разработчик и автор интерактивных образовательных проектов. Создай красивый современный одностраничный ОБУЧАЮЩИЙ сайт уровня профессиональной digital-студии. Это НЕ сайт для продажи курсов. Главная задача — интересно и понятно научить посетителя выбранной теме.',
+function compose(){
+const f=forms(),sectors=chosenSections(),theme=palettes[state.palette];
+const lines=[
+'Ты — опытный frontend-разработчик и дизайнер интерактивных образовательных сайтов. Создай красивый, современный ОДНОСТРАНИЧНЫЙ ОБУЧАЮЩИЙ сайт, не продажу курса. Пользователь должен реально изучить тему.',
+'',
+'КРИТИЧЕСКОЕ ОГРАНИЧЕНИЕ: ВЫВЕДИ НЕ БОЛЕЕ 1000 СТРОК ГОТОВОГО КОДА.',
+'— Считай ВСЕ физические строки итогового ответа: <!DOCTYPE html>, HTML, CSS, JavaScript, комментарии и пустые строки. Не более 1000 строк СУММАРНО. Цель — 600–850 строк с запасом. Это требование важнее декоративных подробностей.',
+'— Ответ должен содержать один полностью законченный HTML-документ от <!DOCTYPE html> до </html>, без Markdown и пояснений. Не обрывай код посередине ради лимита.',
+'— Перед выводом проверь общий объём. Если он больше 1000 строк, сначала сократи повторяющуюся разметку, CSS и декор, затем проверь снова. Не удаляй важные учебные функции.',
+'— Пиши компактный, но ЧИТАЕМЫЙ код: лаконичные CSS-правила, небольшие функции, без гигантских строк, ненужных комментариев, повторов, длинных встроенных SVG и отдельных стилей для каждой карточки.',
 '',
 'КОНЦЕПЦИЯ:',
 '— Название: '+f.name+'.',
-'— Тема обучения: '+f.topic+'.',
-'— Посетитель должен узнать: '+f.goals+'.',
-'— Аудитория: '+f.audience+'.',
-'— Автор проекта: '+f.author+'.',
-'— Главный визуальный образ: '+f.hero+'.',
-'— Стиль: '+designs[state.design]+'. '+designDetails[state.design],
-'— Цвета: '+theme.name+'. Палитра светлая, текст контрастный.',
-'— Подача: '+state.voice+'.',
+'— Тема: '+f.topic+'.',
+'— Чему научится посетитель: '+f.goals+'.',
+'— Аудитория: '+f.audience+'. Автор: '+f.author+'.',
+'— Главный образ: '+f.hero+'.',
+'— Дизайн: '+designs[state.design]+'. '+designDetails[state.design],
+'— Основные цвета: '+theme.name+'.',
+'— Стиль подачи: '+state.voice+'.',
 '',
-'СТРУКТУРА И СОДЕРЖАНИЕ:',
-'— Эффектный первый экран: большое название, короткий заголовок-обещание, реалистичное фото и понятная кнопка перехода к изучению.',
-'— «Что ты узнаешь»: 4–6 коротких понятных пунктов.',
-'— Несколько последовательно выстроенных обучающих разделов с простыми объяснениями и наглядными примерами.',
-'— '+f.facts+' интересных и достоверных фактов, каждый с коротким объяснением.',
-'— Большой фотораздел: не менее '+f.photos+' реалистичных фотографий по теме с короткими подписями.',
-'— Итоговый блок «Что ты теперь знаешь» и отдельный аккуратный блок об авторе.',
-'— Плотность материала: '+state.density+'.',
+'ОБУЧАЮЩЕЕ СОДЕРЖАНИЕ:',
+'— Первый экран с крупным названием, коротким обещанием пользы и большой РЕАЛИСТИЧНОЙ фотографией по теме.',
+'— «Что ты узнаешь»: 4 кратких пункта.',
+'— 2–3 последовательных содержательных раздела с понятными примерами. Объяснения короткие, обычно 1–2 предложения на элемент, без длинных абзацев.',
+'— '+f.facts+' интересных проверяемых фактов с короткими подписями.',
+'— Фотогалерея: '+f.photos+' настоящих тематических фотографий с понятными короткими подписями.',
+'— Итог «Что ты теперь знаешь» и короткий блок об авторе.',
+'— Плотность текста: '+state.density+'.',
 ];
-if(sectors.length)lines.push('— Дополнительные обучающие блоки: '+sectors.join('; ')+'.');
+if(sectors.length)lines.push('— Дополнительные разделы по выбору: '+sectors.join('; ')+'. Реализуй их компактно; если темы пересекаются, объединяй в один раздел вместо дублей.');
 lines.push('',
 'ИНТЕРАКТИВ:',
-'— Работающий мини-тест из '+f.quiz+' вопросов: выбор ответа, понятная проверка, подсказка и итоговый результат.',
-'— Дополнительная интерактивная фишка: '+activities[state.activity]+'.',
-'— Плавные действия и анимации: '+state.animation+'. Используй анимации по делу, не мешай читать.',
-'— Светлая и тёмная темы с РАБОЧИМ переключателем. Оба варианта должны хорошо выглядеть.',
-'— Вся интерактивность должна быть функциональной: клики, состояния, тесты, кнопки и обратная связь.',
+'— Рабочий мини-тест из '+f.quiz+' вопросов. Ответы, проверка, итоговый счёт и возможность пройти заново; данные вопросов храни в одном JS-массиве.',
+'— Одна простая интерактивная функция: '+activities[state.activity]+'. Реализуй её 2–3 состояниями и небольшим JavaScript, без сложных движков.',
+'— Анимации: '+state.animation+'. Не добавляй тяжёлые библиотеки и сложные многошаговые эффекты.',
+'— Рабочий переключатель светлой/тёмной темы: используй CSS-переменные и один атрибут или класс на корне страницы; не дублируй стили целиком.',
+'— Все видимые кнопки и обучающие действия должны работать.',
 '',
-'ВИЗУАЛ:',
-'— Дизайн уровня digital-студии: крупная типографика, выразительные фотографии, пространство, контраст и мягкие тени.',
-'— Чередуй композицию секций. Меньше текста, больше визуальных примеров; крупные читаемые подписи.',
-'— ФОТОГРАФИИ ОБЯЗАТЕЛЬНЫ: используй настоящие тематические фотографии по прямым доступным HTTPS-ссылкам, например с Unsplash или Wikimedia Commons. Убедись, что URL ведёт к реальному изображению; добавь alt и запасной вариант изображения при ошибке загрузки. Не подменяй фотографии SVG, emoji, градиентами или пустыми заглушками.',
-'— Не делай школьный реферат, продающий лендинг, страницу с тарифами, корзину, рекламу или фальшивые отзывы.',
-'— Адаптируй все блоки под компьютер, планшет и телефон.',
+'ФОТО И ВИЗУАЛ:',
+'— Обязательно вставь настоящие фотографии по теме по прямым HTTPS-URL к изображениям (например, известные изображения Unsplash или Wikimedia Commons), а не SVG, emoji, рисованные заменители или пустые заглушки.',
+'— У каждого фото должен быть осмысленный alt. Для галереи храни адреса и подписи в одном массиве и создавай карточки одним общим шаблоном; добавь простой запасной URL фото при ошибке.',
+'— Современная типографика, контраст, крупный главный визуал, разнообразная композиция секций, много воздуха и аккуратные карточки. Не создавай десятки декоративных элементов ради WOW-эффекта.',
+'— Адаптация для компьютера, планшета и телефона. Без рекламы, тарифов, корзины, продающих блоков и фальшивых отзывов.',
 '',
-'ТЕХНИЧЕСКИЕ ТРЕБОВАНИЯ:',
-'— Один полноценный HTML-документ: весь CSS внутри <style>, весь JavaScript внутри <script>. Без внешних JavaScript-библиотек и фреймворков.',
-'— Код должен сразу работать после вставки в HTML-панель CodePen, JS Bin или обычный HTML-редактор. Не нужно создавать или прикладывать файл.',
-'— Семантичная структура, аккуратные состояния, адаптивная верстка, доступные кнопки, работающий мини-тест, рабочий выбор темы.',
-'— Проверь код на явные синтаксические ошибки. Если сложная функция мешает стабильности, упрости её, сохранив дизайн и обучение.',
-'— ВЫВЕДИ ТОЛЬКО ПОЛНЫЙ HTML-КОД, начиная с <!DOCTYPE html> и заканчивая </html>. Без Markdown-ограждений, пояснений, заголовков или текста вне кода. Нужен КОД для вставки в редактор, а НЕ файл.'
+'КАК УЛОЖИТЬСЯ В 1000 СТРОК:',
+'— Рекомендуемый бюджет: HTML до 180 строк, CSS до 280 строк, JavaScript до 320 строк; общий ответ максимум 1000 строк.',
+'— Используй повторно один CSS-класс для похожих карточек, CSS Grid/Flexbox, 1–2 медиазапроса и небольшое число ключевых анимаций.',
+'— Повторяющийся контент (фото, факты, вопросы, учебные карточки) храни в массивах JS и выводи через один шаблон на каждый тип. Не копируй длинную HTML-разметку для каждого элемента.',
+'— Если выбран сложный стиль или интерактив, упрощай его реализацию, а не увеличивай количество строк; не используй canvas/3D, если это не нужно для обучения.',
+'— Избегай отдельных сотен строк на каждый раздел, громоздких иконок, пустых обработчиков и лишних деталей.',
+'',
+'ТЕХНИЧЕСКИЕ УСЛОВИЯ:',
+'— Всё в ОДНОМ HTML: стили только внутри <style>, скрипт только внутри <script>. Чистые HTML/CSS/JS. Без внешних JavaScript-библиотек, фреймворков и дополнительных файлов. Фотографии по URL допустимы.',
+'— Сайт открывается сразу после вставки в HTML-панель CodePen или сохранения в index.html. Нет ошибок JavaScript, работают адаптивность, переключатель темы, тест и интерактив.',
+'— Ответ: ТОЛЬКО полный HTML-код. НЕ БОЛЕЕ 1000 СТРОК В СУММЕ (HTML + CSS + JS).'
 );
-if(f.extra)lines.splice(lines.indexOf('ТЕХНИЧЕСКИЕ ТРЕБОВАНИЯ:'),0,'ДОПОЛНИТЕЛЬНЫЕ ПОЖЕЛАНИЯ: '+f.extra,'');
-return lines.join('\n')}
+if(f.extra)lines.splice(lines.indexOf('ТЕХНИЧЕСКИЕ УСЛОВИЯ:'),0,'ДОПОЛНИТЕЛЬНЫЕ ПОЖЕЛАНИЯ ПОЛЬЗОВАТЕЛЯ: '+f.extra+'. Соблюдай их только в пределах лимита 1000 строк.','');
+return lines.join('\n')
+}
 function selectChoice(group,key,value){state[key]=value;for(const b of group.querySelectorAll('button[data-value]'))b.setAttribute('aria-pressed',String(b.dataset.value===value));refresh()}
 for(const group of document.querySelectorAll('[data-choice-key]')){group.addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b&&group.contains(b))selectChoice(group,group.dataset.choiceKey,b.dataset.value)});group.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const a=[...group.querySelectorAll('button[data-value]')],i=a.indexOf(document.activeElement);if(i>=0){e.preventDefault();let j=(i+(e.key==='ArrowRight'?1:-1)+a.length)%a.length;a[j].click();a[j].focus()}}})}
 function setTab(index){activeTab=index;document.querySelectorAll('.tab').forEach((b,i)=>b.setAttribute('aria-selected',String(index===i)));document.querySelectorAll('.tab-page').forEach((p,i)=>p.classList.toggle('active',i===index));$('stepText').textContent=String(index+1).padStart(2,'0')+' / 04';$('nextBtn').querySelector('span').textContent=index===3?'К промпту':'Дальше'}
